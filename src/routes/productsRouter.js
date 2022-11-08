@@ -52,16 +52,28 @@ productRouter.post("/addProduct", bearerAuth ,async  (req, res, next) => {
     }
   });
   productRouter.put("/oneProduct/:userId/:id", bearerAuth , async  (req, res, next) => {
-    let userId = req.params.userId
+    let userId = parseInt(req.params.userId)
     let realId =req.user.id
     let id = req.params.id
     let obj=req.body;
-    try {
-      let productRecord = await products.update(userId,realId,id,obj);
-        
-      res.status(201).json(productRecord);
-    } catch (e) {
-      next(e.message);
+    console.log('realId: ',typeof realId);
+    console.log('userId: ',typeof userId);
+    if(userId===realId){
+
+      try {
+        let productRecord = await products.update(realId,id,obj);
+        if(productRecord) {
+          res.status(201).json(productRecord);
+  
+        }else{
+          res.status(203).json({msg:"error in updateing recored"});
+  
+        }
+      } catch (e) {
+        next(e.message);
+      }
+    }else{
+      res.status(404)
     }
   });
   productRouter.get("/oneProduct/:userId/:id", bearerAuth , async  (req, res, next) => {

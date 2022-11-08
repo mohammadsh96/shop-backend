@@ -46,7 +46,7 @@ class Collection {
       console.error("post does not exist");
     }
   }
-  async update( userId,realId, postId, obj) {
+  async update(realId, postId, obj) {
     let updated = null;
     if (!postId) {
       throw new Error("No id provided for model ", this.model);
